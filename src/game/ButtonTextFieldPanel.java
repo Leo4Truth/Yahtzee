@@ -3,6 +3,8 @@ package game;
 import java.awt.GridLayout;
 import java.awt.Dimension;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -11,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.text.StyledEditorKit.BoldAction;
 
 public class ButtonTextFieldPanel extends JPanel {
 
@@ -20,8 +23,8 @@ public class ButtonTextFieldPanel extends JPanel {
     public ButtonTextFieldPanel(String btnStr) {
 
         btn = new JButton(btnStr);
-        txtField = new JTextField();
-        
+        txtField = new JTextField("");
+
         txtField.setEditable(false);
 
         Dimension size = new Dimension(400, 20);
@@ -32,54 +35,35 @@ public class ButtonTextFieldPanel extends JPanel {
         setLayout(new GridLayout(0, 2));
         add(btn);
         add(txtField);
-
-        btn.addMouseListener(new MouseListener() {
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				if (txtField.getText().isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "!");
-                    return;
-                }
-                btn.setEnabled(false);
-
-				System.out.println(btn.getText() + ": " + txtField.getText() + ", isEnabled: " + btn.isEnabled());
-			}
-
-			@Override
-			public void mouseClicked(MouseEvent e) { ; }
-			@Override
-			public void mousePressed(MouseEvent e) { ; }
-			@Override
-			public void mouseEntered(MouseEvent e) { ; }
-			@Override
-			public void mouseExited(MouseEvent e) { ; }
-
-        });
+        
     }
 
     public JButton getBtn() { return btn; }
     public JTextField getTxtField() { return txtField; }
 
-    public boolean isEnabled() {
-        System.out.println(btn.getText() + " isEnabled: " + btn.isEnabled());
-        return btn.isEnabled();
-    }
+    public boolean isEnabled() { return btn.isEnabled(); }
 
     public void clear() {
         txtField.setText("");
-        System.out.println(btn.getText() + " clear");
+    }
+
+    public void reset() {
+        btn.setEnabled(true);
+        txtField.setText("");
+    }
+
+    public void setEnabled(boolean b) {
+        btn.setEnabled(b);
     }
 
     public void setValue(int x) {
         if (x >= 0) txtField.setText(String.valueOf(x));
         else txtField.setText("");
     }
-
+    
     public int getValue() {
-        System.out.println(btn.getText() +  " getValue");
         String str = txtField.getText();
-        if (str.equals("")) return 0;
+        if (str.equals("")) return -1;
         return Integer.parseInt(str);
     }
 

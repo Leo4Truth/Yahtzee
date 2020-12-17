@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.net.URL;
 import java.util.Random;
 
 import javax.swing.BoxLayout;
@@ -17,12 +18,12 @@ public class Dice extends JPanel {
 	
 	// file pathes of the six different dice faces
 	private static final String[] DICE_IMG_PATH = new String[] {
-		"die1.png",
-		"die2.png",
-		"die3.png",
-		"die4.png",
-		"die5.png",
-		"die6.png"
+		"resource/die1.png",
+		"resource/die2.png",
+		"resource/die3.png",
+		"resource/die4.png",
+		"resource/die5.png",
+		"resource/die6.png"
 	};
 	
 	private Image[] diceImages = new Image[6]; // Images of 6 different number dice face
@@ -55,18 +56,20 @@ public class Dice extends JPanel {
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		add(lbl);
 		add(keepChkBox);
-	}
-	
-	public void setImage(int num) {
-		img = diceImages[num - 1];
-		lbl.setIcon(new ImageIcon(img));
+		
 		repaint();
 	}
 
 	public int getNum() { return num; }
 	public void setNum(int x) {
 		num = x;
-		setImage(num);
+		if (num < 0) {
+			setVisible(false);
+			return;
+		}
+		setVisible(true);
+		img = diceImages[num - 1];
+		lbl.setIcon(new ImageIcon(img));
 		repaint();
 	}
 
@@ -77,13 +80,15 @@ public class Dice extends JPanel {
 	public void roll() {
 		Random rnd = new Random();
 		num = rnd.nextInt(6) + 1;
-		setImage(num);
+		setNum(num);
 		repaint();
 	}
 
 	public void reset() {
+		num = -1;
 		roll();
 		setKept(false);
+		setVisible(false);
 	}
 	
     public void paintComponent(Graphics g) {
@@ -110,6 +115,6 @@ public class Dice extends JPanel {
         mainFrame.add(dice3);
         mainFrame.add(dice4);
         mainFrame.add(dice5);
-        mainFrame.add(dice6);
+		mainFrame.add(dice6);
     }
 }

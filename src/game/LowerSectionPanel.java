@@ -2,6 +2,8 @@ package game;
 
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -73,29 +75,6 @@ public class LowerSectionPanel extends JPanel {
             ((JComponent) comp).setAlignmentX(Component.CENTER_ALIGNMENT);
         }
 
-
-        for (int i = 0; i < pnlList.size(); i++) {
-            ButtonTextFieldPanel pnl = pnlList.get(i);
-            pnl.getBtn().addMouseListener(new MouseListener() {
-
-                @Override
-                public void mouseReleased(MouseEvent e) {
-                    clear();
-                    totalOfLowerSectionUpdate();
-                }
-
-                @Override
-                public void mouseClicked(MouseEvent e) { ; }
-                @Override
-                public void mousePressed(MouseEvent e) { ; }
-                @Override
-                public void mouseEntered(MouseEvent e) { ; }
-                @Override
-                public void mouseExited(MouseEvent e) { ; }
-
-            });
-        } // end of for loop to addMouseListener to button
-        
     }
 
     public void clear() {
@@ -104,20 +83,27 @@ public class LowerSectionPanel extends JPanel {
         }
     }
 
+    public void reset() {
+        for (ButtonTextFieldPanel pnl : pnlList) pnl.reset();
+        yahtzeeBonusPnl.reset();
+        totalOfLowerSectionPnl.reset();
+    }
+
     public void update(int[] scores) {
         for (int i = 0; i < pnlList.size(); i++) {
             if (pnlList.get(i).isEnabled()) {
                 pnlList.get(i).setValue(scores[i]);
             }
         }
-        totalOfLowerSectionUpdate();
+        sumUp();
     }
 
     public void yahtzeeBonusUpdate() {
-        yahtzeeBonusPnl.setValue(yahtzeeBonusPnl.getValue() + 100);
+        if (yahtzeePnl.isEnabled() && yahtzeeBonusPnl.getValue() == 0) yahtzeeBonusPnl.setValue(100);
+        else yahtzeeBonusPnl.setValue(yahtzeeBonusPnl.getValue() + 100);
     }
 
-    public void totalOfLowerSectionUpdate() {
+    public void sumUp() {
         int sum = 0;
         for (ButtonTextFieldPanel pnl : pnlList) {
             if (!pnl.isEnabled()) {
@@ -130,6 +116,32 @@ public class LowerSectionPanel extends JPanel {
 
     public ArrayList<ButtonTextFieldPanel> getPnlList() {
         return pnlList;
+    }
+
+    public int getTotal() { return totalOfLowerSectionPnl.getValue(); }
+    
+    public void loadData(int[] lowerSectionPnlData) {
+        for (int i = 0; i < pnlList.size(); i++) {
+            pnlList.get(i).setValue(lowerSectionPnlData[i]);
+            if (lowerSectionPnlData[i] < 0) pnlList.get(i).setEnabled(true);
+            else pnlList.get(i).setEnabled(false);
+        }
+        yahtzeeBonusPnl.setValue(lowerSectionPnlData[7]);
+        totalOfLowerSectionPnl.setValue(lowerSectionPnlData[8]);
+    }
+
+    public int[] getData() {
+        int[] scores = new int[9];
+        scores[0] = threeOfAKindPnl.getValue();
+        scores[1] = fourOfAKindPnl.getValue();
+        scores[2] = fullHousePnl.getValue();
+        scores[3] = smallStraightPnl.getValue();
+        scores[4] = largeStraightPnl.getValue();
+        scores[5] = chancePnl.getValue();
+        scores[6] = yahtzeePnl.getValue();
+        scores[7] = yahtzeeBonusPnl.getValue();
+        scores[8] = totalOfLowerSectionPnl.getValue();
+        return scores;
     }
 
     public static void main(String[] argv) {

@@ -51,39 +51,7 @@ public class GamePanel extends JPanel {
         add(dicesPnl);
         add(rollDiceBtn);
 
-        rollDiceBtn.addMouseListener(new MouseListener() {
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                rollDice();
-            }
-
-			@Override
-			public void mouseClicked(MouseEvent e) { ; }
-			@Override
-			public void mousePressed(MouseEvent e) { ; }
-			@Override
-			public void mouseEntered(MouseEvent e) { ; }
-			@Override
-			public void mouseExited(MouseEvent e) { ; }
-
-        });
-
-        for (Dice dice : diceList) {
-            dice.getCheckBox().addActionListener(new ActionListener() {
-
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    boolean allKept = true;
-                    for (Dice d : diceList) {
-                        if (!d.isKept()) allKept = false;
-                    }
-                    if (allKept) rollDiceBtn.setEnabled(false);
-                    else rollDiceBtn.setEnabled(true);
-                }
-                
-            });
-        }
+        reset();
     }
 
     public void rollDice() {
@@ -95,6 +63,7 @@ public class GamePanel extends JPanel {
     }
 
     public JButton getRollDiceBtn() { return rollDiceBtn; }
+
     public int[] getDices() {
         int[] dices = new int[5];
         for (int i = 0; i < 5; i++) dices[i] = diceList.get(i).getNum();
@@ -102,9 +71,38 @@ public class GamePanel extends JPanel {
     }
 
     public void reset() {
+        rollDiceBtn.setEnabled(true);
         for (Dice dice : diceList) {
             dice.reset();
         }
+    }
+
+    
+    public void loadData(int[] dices, boolean[] kept) {
+        for (int i = 0; i < diceList.size(); i++) {
+            Dice dice = diceList.get(i);
+            dice.setNum(dices[i]);
+            dice.setKept(kept[i]);
+        }
+    }
+
+    public int[] getDicesData() {
+        int[] dices = new int[5];
+        for (int i = 0; i < 5; i++) {
+            Dice dice = diceList.get(i);
+            if (dice.isVisible()) dices[i] = dice.getNum();
+            else dices[i] = -1;
+        }
+        return dices;
+    }
+
+    public boolean[] getKeptData() {
+        boolean[] kept = new boolean[5];
+        for (int i = 0; i < 5; i++) {
+            Dice dice = diceList.get(i);
+            kept[i] = dice.isKept();
+        }
+        return kept;
     }
 
     public static void main(String[] args) {

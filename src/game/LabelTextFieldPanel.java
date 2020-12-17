@@ -16,7 +16,7 @@ class LabelTextFieldPanel extends JPanel {
     public LabelTextFieldPanel(String lblStr) {
 
         lbl = new JLabel(lblStr, JLabel.CENTER);
-        txtField = new JTextField();
+        txtField = new JTextField("0");
 
         txtField.setEditable(false);
 
@@ -34,7 +34,15 @@ class LabelTextFieldPanel extends JPanel {
 
     public void clear() {
         txtField.setText("");
-        System.out.println(lbl.getText() + " clear");
+    }
+
+    public void reset() {
+        lbl.setEnabled(true);
+        txtField.setText("");
+    }
+
+    public void setEditable(boolean b) {
+        txtField.setEditable(b);
     }
 
     public void setValue(int x) {
@@ -43,7 +51,6 @@ class LabelTextFieldPanel extends JPanel {
     }
     
     public int getValue() {
-        System.out.println(lbl.getText() +  " getValue");
         String str = txtField.getText();
         if (str.equals("")) return 0;
         return Integer.parseInt(str);
@@ -62,8 +69,6 @@ class LabelTextFieldPanel extends JPanel {
         mainFrame.add(yahtzeeBonusPnl);
         mainFrame.add(totalOfLowerSectionPnl);
         mainFrame.add(grandTotalPnl);
-
-        System.out.println(yahtzeeBonusPnl.getValue());
 
         mainFrame.setVisible(true);
     }
